@@ -3,6 +3,9 @@ import {
   Mail, Phone, MapPin, Linkedin, Download, ExternalLink, BookOpen, Megaphone,
   LayoutGrid, PenTool, FileText, Newspaper
 } from "lucide-react";
+// L'importation du fichier CSS a été retirée pour résoudre le problème de compilation.
+// Le style est géré uniquement par les classes Tailwind.
+
 
 // NOTE IMPORTANTE : Ce code est une application React complète, prête à être déployée.
 // Les composants manquants (Card, Badge, Button) ont été recréés ici
@@ -94,7 +97,6 @@ export default function App() {
     {
       title: "Médiathèque — Coups de cœur littéraires",
       desc: "Rédaction de recommandations pour romans, BD et jeunesse.",
-      link: "#",
     },
   ];
 
