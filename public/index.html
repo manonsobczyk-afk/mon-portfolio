@@ -23,7 +23,7 @@
     <div id="app"></div>
 
     <script>
-        // Définition des chemins SVG pour les icônes
+        // Définition des chemins SVG pour les icônes (via Lucide Icons)
         const ICONS = {
             'mail': '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/>',
             'phone': '<path d="M22 16.92v3a2 2 0 0 1-2.18 2.02 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
@@ -72,7 +72,7 @@
             location: "Île-de-France",
             email: "manon.sobczyk@live.fr",
             phone: "+33 6 15 33 90 92",
-            linkedin: "www.linkedin.com/in/manon-sobczyk-14952722b",
+            linkedin: "https://www.linkedin.com/in/manon-sobczyk-14952722b",
             summary: "Je crée des contenus qui donnent du sens aux projets : articles, newsletters, supports print et recommandations culturelles. Mon objectif : rendre l’information claire, engageante et inspirante.",
         };
 
@@ -280,38 +280,35 @@
                     const targetId = button.getAttribute('data-target');
                     const targetElement = document.getElementById(targetId);
                     if (targetElement) {
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const scrollPosition = targetElement.offsetTop - headerHeight;
                         window.scrollTo({
-                            top: targetElement.offsetTop - document.querySelector('header').offsetHeight,
+                            top: scrollPosition,
                             behavior: 'smooth'
                         });
-
-                        // Mettre à jour l'état actif du bouton de navigation
-                        document.querySelectorAll('.nav-button').forEach(btn => {
-                            btn.classList.remove('bg-slate-900', 'text-white', 'shadow');
-                            btn.classList.add('hover:bg-accent', 'hover:text-accent-foreground');
-                        });
-                        button.classList.add('bg-slate-900', 'text-white', 'shadow');
-                        button.classList.remove('hover:bg-accent', 'hover:text-accent-foreground');
                     }
                 });
             });
 
             // Gérer la mise à jour de l'état actif lors du défilement
             const observer = new IntersectionObserver((entries) => {
+                let activeId = null;
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        document.querySelectorAll('.nav-button').forEach(btn => {
-                            if (btn.getAttribute('data-target') === entry.target.id) {
-                                btn.classList.add('bg-slate-900', 'text-white', 'shadow');
-                                btn.classList.remove('hover:bg-accent', 'hover:text-accent-foreground');
-                            } else {
-                                btn.classList.remove('bg-slate-900', 'text-white', 'shadow');
-                                btn.classList.add('hover:bg-accent', 'hover:text-accent-foreground');
-                            }
-                        });
+                        activeId = entry.target.id;
                     }
                 });
-            }, { rootMargin: '-50% 0px -50% 0px' }); // Un décalage de -50% pour déclencher l'événement au milieu de la section
+
+                document.querySelectorAll('.nav-button').forEach(btn => {
+                    if (btn.getAttribute('data-target') === activeId) {
+                        btn.classList.add('bg-slate-900', 'text-white', 'shadow');
+                        btn.classList.remove('hover:bg-accent', 'hover:text-accent-foreground');
+                    } else {
+                        btn.classList.remove('bg-slate-900', 'text-white', 'shadow');
+                        btn.classList.add('hover:bg-accent', 'hover:text-accent-foreground');
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' }); // Un décalage pour déclencher l'événement au milieu de la section
 
             document.querySelectorAll('section').forEach(section => {
                 observer.observe(section);
